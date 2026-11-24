@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/*
+  Palette: Design.md section 2. Three core hues (abyss, teal, turquoise) plus one
+  accent (coral). Pearl and lavender are neutrals for text, not palette members.
+  Held to R-29: 3 core + 1 accent.
+*/
+:root {
+  --abyss: #04141f;
+  --abyss-deep: #020b12;
+  --ocean: #0a2c40;
+  --teal: #0e5c6b;
+  --turquoise: #3fd2c7;
+  --cyan: #7ceaf0;
+  --pearl: #f2f7f8;
+  --lavender: #b9c6d9;
+  --coral: #ff7a8a;
+
+  /* Text tones verified against --abyss for WCAG AA (R-25). */
+  --text-primary: var(--pearl);
+  --text-secondary: #a9bdc9;
+
+  --edge: color-mix(in oklab, var(--turquoise) 22%, transparent);
+  --surface: color-mix(in oklab, var(--ocean) 55%, transparent);
+
+  /*
+    Radius scale, not a single pill. Variation carries hierarchy (R-11):
+    pill is reserved for the primary CTA so it reads as the one thing to press.
+  */
+  --r-sm: 6px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+}
+
+@theme inline {
+  --color-abyss: var(--abyss);
+  --color-abyss-deep: var(--abyss-deep);
+  --color-ocean: var(--ocean);
+  --color-teal: var(--teal);
+  --color-turquoise: var(--turquoise);
+  --color-cyan: var(--cyan);
+  --color-pearl: var(--pearl);
+  --color-lavender: var(--lavender);
+  --color-coral: var(--coral);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-pill: var(--r-pill);
+}
+
+/*
+  Dark only, and deliberately so (R-21): the product is a deep-ocean character.
+  A light mode would contradict the premise, so no toggle is shipped rather than
+  shipping a broken one (R-34).
+*/
+body {
+  background: var(--abyss);
+  color: var(--text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/*
+  Focus ring is custom, never removed (R-32). Turquoise against the dark ground
+  clears AA on every surface in this page.
+*/
+:focus-visible {
+  outline: 2px solid var(--turquoise);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--turquoise) 40%, transparent);
+  color: var(--pearl);
+}
+
+/* Identity motif: one curve doing double duty as water and as sound. */
+@keyframes drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: var(--peak, 0.5); }
+  90% { opacity: var(--peak, 0.5); }
+  100% { transform: translateY(-105vh) translateX(var(--sway, 14px)); opacity: 0; }
+}
+
+@keyframes sway {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1.4deg); }
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--coral) 55%, transparent); }
+  70% { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Karaoke bars: the motif made literal, only where singing is the subject. */
+@keyframes sing {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+/*
+  R-03 / accessibility: motion is decoration here, so it all stops on request.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
